@@ -68,6 +68,47 @@ app.get('/libros/publicacion/:anio', (req, res)=>{ //manejador de ruta con un pa
         res.status(404).json({mensaje: 'no se han encontrado libros publicados en el anio'});
     }
 });
+//endpoint Bienvenida
+app.get('/', (req, res) => {
+    res.json({ mensaje: 'Bienvenido, mi nombre es Jose Rodrigo Rios Arcienega y soy Informatico en el area de Soporte.' });
+});
+//endpoint libros por autor
+app.get('/libros/autor/:autor', (req, res) => {
+    const autor = req.params.autor;
+    const librosPorAutor = librosBiblicos.filter(libro => libro.Autor.toLowerCase() === autor.toLowerCase());
+    if (librosPorAutor.length > 0) {
+        res.json(librosPorAutor);
+    } else {
+        res.status(404).json({ mensaje: 'No se encontraron libros de este autor' });
+    }
+});
+//endpoint Cantidad
+app.get('/libros/cantidad', (req, res) => {
+    const cantidad = librosBiblicos.length;
+    res.json({ cantidad: cantidad });
+});
+
+
+//endpoint para obtener texto
+app.get('/libros/buscar/:nombre', (req, res) => {
+    const nombreBuscado = req.params.nombre.toLowerCase();
+    const librosFiltrados = librosBiblicos.filter(libro => libro.nombre.toLowerCase().includes(nombreBuscado));
+    if (librosFiltrados.length > 0) {
+        res.json(librosFiltrados);
+    } else {
+        res.status(404).json({ mensaje: 'No se pudo obtener el texto descrito' });
+    }
+});
+
+//endpoint por nombre
+app.get('/libros/ordenados', (req, res) => {
+    const librosOrdenados = librosBiblicos.slice().sort((a, b) => a.nombre.localeCompare(b.nombre));
+    res.json(librosOrdenados);
+});
+
+
+
+
 app.listen(PORT, () => {
     console.log("Servidor corriendo corriendo en el puerto http://localhost: " + PORT);
 });
