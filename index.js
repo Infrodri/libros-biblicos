@@ -5,9 +5,9 @@ const PORT = 3000; //puede cambiar
 
 //array
 let librosBiblicos = [
-    {id: 1 , nombre: 'Genesis' , Autor: 'Moises'},
-    {id: 2 , nombre: 'Exodo' , Autor: 'Moises'},
-    {id: 3 , nombre: 'Levitico' , Autor: 'Moises'},
+    {id: 1 , nombre: 'Genesis' , Autor: 'Moises' , anioPublicacion: 2020},
+    {id: 2 , nombre: 'Exodo' , Autor: 'Moises', anioPublicacion: 2024},
+    {id: 3 , nombre: 'Levitico' , Autor: 'Moises', anioPublicacion: 1990},
 ];
 //manejo de JSON
 app.use(express.json());
@@ -44,10 +44,30 @@ app.put('/actualizar-libro/:id', (req, res) => {
         librosBiblicos[indexLibroLocalizado] = req.body;
         res.json(librosBiblicos[indexLibroLocalizado]);
     } else {
+
         res.status(404).json({mensaje : 'Libro no encontrado'});
     }
 });
+// endpoint 5 eliminar libro
+app.delete('/eliminar-libro/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    lBiblico = librosBiblicos.filter( libro => libro.id !== id);
+    res.status(201).json( {mensaje : 'se ha eliminado el libro'})
+    console.log(lBiblico);
+});
 
+
+//endpoint 6 
+app.get('/libros/publicacion/:anio', (req, res)=>{ //manejador de ruta con un parametro id
+    const year = parseInt(req.params.anio);
+    const librosPublicados = librosBiblicos.filter( x => x.anioPublicacion === year);
+    if (librosPublicados.length > 0 ){
+        res.json(librosPublicados);
+    }
+    else {
+        res.status(404).json({mensaje: 'no se han encontrado libros publicados en el anio'});
+    }
+});
 app.listen(PORT, () => {
-    console.log("Servidor corriendo en el puerto http://localhost: " + PORT);
+    console.log("Servidor corriendo corriendo en el puerto http://localhost: " + PORT);
 });
