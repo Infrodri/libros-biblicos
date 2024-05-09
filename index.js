@@ -73,7 +73,7 @@ app.get('/', (req, res) => {
     res.json({ mensaje: 'Bienvenido, mi nombre es Jose Rodrigo Rios Arcienega y soy Informatico en el area de Soporte.' });
 });
 //endpoint libros por autor
-app.get('/libros/autor/:autor', (req, res) => {
+app.get('/libros-autor/:autor', (req, res) => {
     const autor = req.params.autor;
     const librosPorAutor = librosBiblicos.filter(libro => libro.Autor.toLowerCase() === autor.toLowerCase());
     if (librosPorAutor.length > 0) {
@@ -81,16 +81,23 @@ app.get('/libros/autor/:autor', (req, res) => {
     } else {
         res.status(404).json({ mensaje: 'No se encontraron libros de este autor' });
     }
+       // res.json({respuesta:"hola"});
 });
-//endpoint Cantidad
-app.get('/libros/cantidad', (req, res) => {
+//endpoint cantidad
+app.get('/libros-cantidad', (req, res) => {
     const cantidad = librosBiblicos.length;
-    res.json({ cantidad: cantidad });
-});
+    console.log('Cantidad de libros:'+ cantidad);
+   
+    res.status(200).json({cantidad: cantidad });
+        // res.json({respuesta:"hola"});
+   });
 
 
-//endpoint para obtener texto
-app.get('/libros/buscar/:nombre', (req, res) => {
+
+
+
+//endpoint buscar por nombre
+app.get('/buscar/:nombre', (req, res) => {
     const nombreBuscado = req.params.nombre.toLowerCase();
     const librosFiltrados = librosBiblicos.filter(libro => libro.nombre.toLowerCase().includes(nombreBuscado));
     if (librosFiltrados.length > 0) {
@@ -100,8 +107,8 @@ app.get('/libros/buscar/:nombre', (req, res) => {
     }
 });
 
-//endpoint por nombre
-app.get('/libros/ordenados', (req, res) => {
+//endpoint ordenado por nombre
+app.get('/ordenados', (req, res) => {
     const librosOrdenados = librosBiblicos.slice().sort((a, b) => a.nombre.localeCompare(b.nombre));
     res.json(librosOrdenados);
 });
